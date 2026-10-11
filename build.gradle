@@ -1,0 +1,103 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.107'
+}
+
+version = '0.2.4-alpha-neoforge.1'
+group = 'me.cortex'
+base { archivesName = 'voxy-1.21.1' }
+java { toolchain.languageVersion = JavaLanguageVersion.of(21) }
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://api.modrinth.com/maven' }
+}
+
+neoForge {
+    version = '21.1.209'
+    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+    runs {
+        client { client() }
+    }
+    mods {
+        voxy { sourceSet sourceSets.main }
+    }
+}
+
+configurations { bundledNatives { transitive = false } }
+
+dependencies {
+    implementation 'maven.modrinth:sodium:mc1.21.1-0.6.13-neoforge'
+    compileOnly 'maven.modrinth:iris:1.8.12+1.21.1-neoforge'
+
+    for (module in ['lwjgl-lmdb', 'lwjgl-zstd']) {
+        implementation "org.lwjgl:${module}:3.3.3"
+        jarJar "org.lwjgl:${module}:3.3.3"
+        for (platform in ['natives-linux', 'natives-windows']) {
+            runtimeOnly "org.lwjgl:${module}:3.3.3:${platform}"
+            bundledNatives "org.lwjgl:${module}:3.3.3:${platform}"
+        }
+    }
+    for (dep in ['redis.clients:jedis:5.1.0', 'org.rocksdb:rocksdbjni:10.2.1',
+                 'org.apache.commons:commons-pool2:2.12.0',
+                 'org.tukaani:xz:1.10']) {
+        implementation dep
+        jarJar dep
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+    options.compilerArgs += ['-Xmaxerrs', '1000']
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('META-INF/neoforge.mods.toml') { expand(version: project.version) }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'maven.modrinth:iris:1.8.12+1.21.1-neoforge'
+}
+test { useJUnitPlatform() }
+
+// Native classifier jars share module names and JarJar coordinates. Embed only
+// their resources in Voxy so both operating systems retain their native binaries.
+processResources {
+    from({ configurations.bundledNatives.collect { zipTree(it) } }) {
+        include 'linux/x64/**/*.so', 'windows/x64/**/*.dll'
+    }
+}
+dependencies {
+    testImplementation 'org.ow2.asm:asm-tree:9.7.1'
+    testImplementation files(sourceSets.main.compileClasspath)
+}
+dependencies {
+    def nativePlatform = System.getProperty('os.name').toLowerCase().contains('win') ? 'windows' : 'linux'
+    testRuntimeOnly "org.lwjgl:lwjgl:3.3.3:natives-${nativePlatform}"
+}
+// NeoForge needs non-mod libraries on the development game's legacy classpath.
+configurations.clientAdditionalRuntimeClasspath.extendsFrom(configurations.jarJar)
+if (providers.gradleProperty('withIris').isPresent()) {
+    dependencies { runtimeOnly 'maven.modrinth:iris:1.8.12+1.21.1-neoforge' }
+}
+
+neoForge.runs {
+    packagedClient {
+        client()
+        loadedMods = []
+        gameDirectory = file('run-packaged')
+    }
+}
+tasks.named('preparePackagedClientRun') {
+    dependsOn tasks.jar
+    doLast {
+        copy {
+            from tasks.jar.archiveFile
+            into 'run-packaged/mods'
+        }
+    }
+}

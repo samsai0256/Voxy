@@ -1,0 +1,11 @@
+{
+  "upstream": "https://github.com/MCRcortex/voxy",
+  "commit": "f031d761b3b91cbc6faf6b9c60969deb5ca04c3b",
+  "input_jar": "voxy-0.2.4-alpha.jar",
+  "input_sha256": "27a389c7da3bdf9ece3aa7241e2cf6f17f1756bf9fa5f047a9acbe260c9d204e",
+  "target_minecraft": "1.21.1",
+  "target_loader": "NeoForge",
+  "status": "NeoForge port implemented and compiled; runtime validation recorded in PORTING.md",
+  "neoforge": "21.1.209",
+  "sodium": "0.6.13+mc1.21.1"
+}

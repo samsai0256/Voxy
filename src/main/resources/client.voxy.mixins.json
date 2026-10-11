@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "package": "me.cortex.voxy.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "iris.CustomUniformsAccessor",
+    "iris.IrisRenderingPipelineAccessor",
+    "iris.MixinIrisRenderingPipeline",
+    "iris.MixinIrisSamplers",
+    "iris.MixinMatrixUniforms",
+    "iris.MixinProgramSet",
+    "iris.MixinShaderPackSourceNames",
+    "iris.MixinStandardMacros",
+    "minecraft.MixinClientChunkManager",
+    "minecraft.MixinClientLoginNetworkHandler",
+    "minecraft.MixinDebugHud",
+    "minecraft.MixinFogRenderer",
+    "minecraft.MixinGlDebug",
+    "minecraft.MixinMinecraftClient",
+    "minecraft.MixinThreadExecutor",
+    "minecraft.MixinWindow",
+    "minecraft.MixinWorldRenderer",
+    "sodium.AccessorChunkTracker",
+    "sodium.MixinDefaultChunkRenderer",
+    "sodium.MixinRenderSectionManager",
+    "sodium.MixinSodiumOptionsGUI"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "me.cortex.voxy.neoforge.VoxyMixinPlugin"
+}

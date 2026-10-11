@@ -7,9 +7,10 @@ this is not a metadata-only conversion.
 
 ## Install
 
-1. Use Minecraft **1.21.1**, Java **21**, and NeoForge **21.1.209**.
-2. Install **Sodium 0.6.13 for Minecraft 1.21.1, NeoForge edition**.
-3. Put `voxy-1.21.1-0.2.4-alpha-neoforge.1.jar` in the client instance's `mods`
+1. Use Minecraft **1.21.1**, Java **21**, and NeoForge **21.1.219 or newer**
+   in the 21.1 series. Sodium 0.8.13's embedded APIs require this minimum.
+2. Install **Sodium 0.8.13 for Minecraft 1.21.1, NeoForge edition**.
+3. Put `voxy-1.21.1-0.2.4-alpha-neoforge.2.jar` in the client instance's `mods`
    folder. Remove the original Fabric Voxy JAR from that instance.
 4. Launch and open a world. Voxy records visited chunks for distant rendering.
    Its settings are available through NeoForge's Mods menu.
@@ -46,6 +47,10 @@ A display and supported graphics driver are needed for client runs.
   initialized the normal Voxy rendering pipeline, populated its on-disk world
   cache, successfully ran `/voxy reload`, and saved/disconnected with Voxy
   renderer and instance shutdown completing.
+- The replacement build was tested with Sodium 0.8.13 as an ordinary mod-file
+  installation. Its nested NeoForge mod loaded, Voxy's Sodium mixins applied,
+  an existing world rendered, and Voxy's migrated settings page appeared in
+  Sodium 0.8's configuration screen.
 - These graphics checks used Linux Mesa llvmpipe under Xvfb with
   `MESA_GL_VERSION_OVERRIDE=4.6` and `MESA_GLSL_VERSION_OVERRIDE=460`. They are
   software smoke tests, not evidence of performance or physical GPU support.

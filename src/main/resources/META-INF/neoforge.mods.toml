@@ -18,7 +18,7 @@ config="common.voxy.mixins.json"
 [[dependencies.voxy]]
 modId="neoforge"
 type="required"
-versionRange="[21.1.209,21.2)"
+versionRange="[21.1.219,21.2)"
 ordering="NONE"
 side="CLIENT"
 [[dependencies.voxy]]
@@ -29,8 +29,8 @@ ordering="NONE"
 side="CLIENT"
 [[dependencies.voxy]]
 modId="sodium"
-type="required"
-versionRange="[0.6.13,0.7)"
+type="optional"
+versionRange="[0.8.13,0.9)"
 ordering="AFTER"
 side="CLIENT"
 [[dependencies.voxy]]

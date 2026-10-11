@@ -6,6 +6,6 @@
   "target_minecraft": "1.21.1",
   "target_loader": "NeoForge",
   "status": "NeoForge port implemented and compiled; runtime validation recorded in PORTING.md",
-  "neoforge": "21.1.209",
-  "sodium": "0.6.13+mc1.21.1"
+  "neoforge": "21.1.219",
+  "sodium": "0.8.13+mc1.21.1"
 }

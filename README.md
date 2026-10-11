@@ -7,9 +7,9 @@ This repository contains an unofficial port of Voxy 0.2.4-alpha to Minecraft
 Required versions:
 
 - Minecraft 1.21.1
-- NeoForge 21.1.209
+- NeoForge 21.1.219 or newer in the 21.1 series
 - Java 21
-- Sodium 0.6.13 for NeoForge 1.21.1
+- Sodium 0.8.13 for NeoForge 1.21.1
 
 Iris 1.8.12 is optional. See [PORTING.md](PORTING.md) for installation,
 validation results, build instructions and known limitations.

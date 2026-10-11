@@ -3,7 +3,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.107'
 }
 
-version = '0.2.4-alpha-neoforge.1'
+version = '0.2.4-alpha-neoforge.2'
 group = 'me.cortex'
 base { archivesName = 'voxy-1.21.1' }
 java { toolchain.languageVersion = JavaLanguageVersion.of(21) }
@@ -14,7 +14,7 @@ repositories {
 }
 
 neoForge {
-    version = '21.1.209'
+    version = '21.1.219'
     accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
     runs {
         client { client() }
@@ -24,10 +24,32 @@ neoForge {
     }
 }
 
-configurations { bundledNatives { transitive = false } }
+configurations {
+    bundledNatives { transitive = false }
+    sodiumBundle { transitive = false }
+}
+
+def sodiumApiJar = layout.buildDirectory.file('generated/sodium/sodium-api.jar')
+tasks.register('extractSodiumApi') {
+    inputs.files(configurations.sodiumBundle)
+    outputs.file(sodiumApiJar)
+    doLast {
+        def bundle = configurations.sodiumBundle.singleFile
+        def output = sodiumApiJar.get().asFile
+        output.parentFile.mkdirs()
+        new java.util.zip.ZipFile(bundle).withCloseable { zip ->
+            def entry = zip.getEntry('META-INF/jarjar/net.caffeinemc.sodium-neoforge-0.8.13+mc1.21.1-mod.jar')
+            if (entry == null) throw new GradleException("Sodium's nested implementation JAR was not found in ${bundle.name}")
+            zip.getInputStream(entry).withCloseable { input ->
+                output.withOutputStream { it << input }
+            }
+        }
+    }
+}
 
 dependencies {
-    implementation 'maven.modrinth:sodium:mc1.21.1-0.6.13-neoforge'
+    sodiumBundle 'maven.modrinth:sodium:mc1.21.1-0.8.13-neoforge'
+    compileOnly files(sodiumApiJar)
     compileOnly 'maven.modrinth:iris:1.8.12+1.21.1-neoforge'
 
     for (module in ['lwjgl-lmdb', 'lwjgl-zstd']) {
@@ -47,6 +69,7 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).configureEach {
+    dependsOn tasks.named('extractSodiumApi')
     options.encoding = 'UTF-8'
     options.release = 21
     options.compilerArgs += ['-Xmaxerrs', '1000']
@@ -94,9 +117,14 @@ neoForge.runs {
 }
 tasks.named('preparePackagedClientRun') {
     dependsOn tasks.jar
+    outputs.upToDateWhen { false }
     doLast {
         copy {
             from tasks.jar.archiveFile
+            into 'run-packaged/mods'
+        }
+        copy {
+            from configurations.sodiumBundle
             into 'run-packaged/mods'
         }
     }

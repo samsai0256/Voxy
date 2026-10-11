@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import me.cortex.voxy.common.Logger;
 import me.cortex.voxy.common.util.cpu.CpuLayout;
 import me.cortex.voxy.commonImpl.VoxyCommon;
-import net.caffeinemc.mods.sodium.client.gui.options.storage.OptionStorage;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 
@@ -16,7 +15,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class VoxyConfig implements OptionStorage<VoxyConfig> {
+public class VoxyConfig {
     private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
@@ -73,11 +72,6 @@ public class VoxyConfig implements OptionStorage<VoxyConfig> {
     private static Path getConfigPath() {
         return FMLPaths.CONFIGDIR.get()
                 .resolve("voxy-config.json");
-    }
-
-    @Override
-    public VoxyConfig getData() {
-        return this;
     }
 
     public boolean isRenderingEnabled() {

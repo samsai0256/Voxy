@@ -3,7 +3,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.107'
 }
 
-version = '0.2.4-alpha-neoforge.2'
+version = '0.2.4-alpha-neoforge.3'
 group = 'me.cortex'
 base { archivesName = 'voxy-1.21.1' }
 java { toolchain.languageVersion = JavaLanguageVersion.of(21) }

@@ -22,7 +22,12 @@ import java.util.stream.Stream;
 
 public class Serialization {
     public static final Set<Class<?>> CONFIG_TYPES = new HashSet<>();
-    public static Gson GSON;
+    private static volatile Gson GSON;
+
+    public static Gson gson() {
+        if (GSON == null) init();
+        return GSON;
+    }
 
     private static final class GsonConfigSerialization <T> implements TypeAdapterFactory {
         private final String typeField = "TYPE";
@@ -90,7 +95,8 @@ public class Serialization {
         }
     }
 
-    public static void init() {
+    public static synchronized void init() {
+        if (GSON != null) return;
         String BASE_SEARCH_PACKAGE = "me.cortex.voxy";
 
         Map<Class<?>, GsonConfigSerialization<?>> serializers = new HashMap<>();

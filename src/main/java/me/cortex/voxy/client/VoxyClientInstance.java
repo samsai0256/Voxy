@@ -53,7 +53,7 @@ public class VoxyClientInstance extends VoxyInstance {
         Config config = null;
         if (Files.exists(json)) {
             try {
-                config = Serialization.GSON.fromJson(Files.readString(json), Config.class);
+                config = Serialization.gson().fromJson(Files.readString(json), Config.class);
                 if (config == null) {
                     Logger.error("Config deserialization null, reverting to default");
                 } else {
@@ -71,7 +71,7 @@ public class VoxyClientInstance extends VoxyInstance {
             config = DEFAULT_STORAGE_CONFIG;
         }
         try {
-            Files.writeString(json, Serialization.GSON.toJson(config));
+            Files.writeString(json, Serialization.gson().toJson(config));
         } catch (Exception e) {
             throw new RuntimeException("Failed write the config, aborting!", e);
         }

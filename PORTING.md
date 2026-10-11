@@ -10,7 +10,7 @@ this is not a metadata-only conversion.
 1. Use Minecraft **1.21.1**, Java **21**, and NeoForge **21.1.219 or newer**
    in the 21.1 series. Sodium 0.8.13's embedded APIs require this minimum.
 2. Install **Sodium 0.8.13 for Minecraft 1.21.1, NeoForge edition**.
-3. Put `voxy-1.21.1-0.2.4-alpha-neoforge.2.jar` in the client instance's `mods`
+3. Put `voxy-1.21.1-0.2.4-alpha-neoforge.3.jar` in the client instance's `mods`
    folder. Remove the original Fabric Voxy JAR from that instance.
 4. Launch and open a world. Voxy records visited chunks for distant rendering.
    Its settings are available through NeoForge's Mods menu.
